@@ -1,9 +1,9 @@
-package ru.practicum.shareit.item.dto;
+package ru.practicum.shareit.user.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -12,15 +12,13 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 @Builder
-public class ItemDto {
-    private Integer id;
+public class User {
+    private int id;
     @NotBlank
     @NotNull
     private String name;
     @NotBlank
     @NotNull
-    private String description;
-    @NotNull
-    @JsonProperty("available")
-    private Boolean isFree;
+    @Email
+    private String email;
 }
