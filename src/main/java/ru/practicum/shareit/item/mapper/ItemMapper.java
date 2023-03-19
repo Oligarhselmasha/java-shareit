@@ -5,7 +5,7 @@ import ru.practicum.shareit.item.model.Item;
 
 public interface ItemMapper {
 
-    Item toItem (ItemDto itemDto);
+    Item toItem(ItemDto itemDto);
 
-    ItemDto toItemDto (Item item);
+    ItemDto toItemDto(Item item);
 }
