@@ -43,13 +43,13 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Item getItem(Long userId, Integer itemId) {
+    public Item getItem(Integer itemId) {
         return itemRepository.getItem(itemId);
     }
 
     @Override
     public void removeItem(Long userId, Integer itemId) {
-        Item item = getItem(userId, itemId);
+        Item item = getItem(itemId);
         if (item.getOwner().getId() != userId) {
             throw new ValidationException("Isn't user's thing");
         }

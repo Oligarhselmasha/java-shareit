@@ -11,7 +11,7 @@ public interface ItemService {
 
     Item updateItem(ItemDto itemDto, Long userId, Integer itemId);
 
-    Item getItem(Long userId, Integer itemId);
+    Item getItem(Integer itemId);
 
     void removeItem(Long userId, Integer itemId);
 
