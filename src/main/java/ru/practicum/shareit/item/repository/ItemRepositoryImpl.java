@@ -46,7 +46,7 @@ public class ItemRepositoryImpl implements ItemRepository {
         return items.stream()
                 .filter(item -> Objects.equals(item.getId(), itemId))
                 .findFirst()
-                .orElseThrow();
+                .orElseThrow(() -> new MissingException("No found with id: " + itemId));
     }
 
     @Override
