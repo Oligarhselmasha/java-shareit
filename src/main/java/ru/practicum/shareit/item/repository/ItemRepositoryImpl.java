@@ -6,6 +6,7 @@ import ru.practicum.shareit.item.model.Item;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -14,13 +15,14 @@ import java.util.stream.Collectors;
 public class ItemRepositoryImpl implements ItemRepository {
 
     private int itemId = 0;
-    private final List<Item> items = new ArrayList<>();
+    private final HashMap<Integer, Item> items = new HashMap<>();
+
 
     @Override
     public Item createItem(Item item) {
         itemId++;
         item.setId(itemId);
-        items.add(item);
+        items.put(itemId, item);
         return item;
     }
 
@@ -37,13 +39,13 @@ public class ItemRepositoryImpl implements ItemRepository {
             itemUpdated.setIsFree(item.getIsFree());
         }
         removeItem(item.getId());
-        items.add(itemUpdated);
+        items.put(itemUpdated.getId(), itemUpdated);
         return itemUpdated;
     }
 
     @Override
     public Item getItem(Integer itemId) {
-        return items.stream()
+        return items.values().stream()
                 .filter(item -> Objects.equals(item.getId(), itemId))
                 .findFirst()
                 .orElseThrow(() -> new MissingException("No found with id: " + itemId));
@@ -51,16 +53,16 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Override
     public void removeItem(Integer itemId) {
-        Item itemForRemove = items.stream()
+        items.values().stream()
                 .filter(item -> Objects.equals(item.getId(), itemId))
                 .findFirst()
                 .orElseThrow(() -> new MissingException("No found with id: " + itemId));
-        items.remove(itemForRemove);
+        items.remove(itemId);
     }
 
     @Override
     public List<Item> getUsersItems(Long userId) {
-        return items.stream()
+        return items.values().stream()
                 .filter(item -> item.getOwner().getId() == userId)
                 .collect(Collectors.toList());
     }
@@ -70,7 +72,7 @@ public class ItemRepositoryImpl implements ItemRepository {
         if (text.isBlank() || text.isEmpty()) {
             return new ArrayList<>();
         }
-        List<Item> freeItems = items.stream()
+        List<Item> freeItems = items.values().stream()
                 .filter(item -> item.getIsFree().equals(true))
                 .collect(Collectors.toList());
         return freeItems.stream()

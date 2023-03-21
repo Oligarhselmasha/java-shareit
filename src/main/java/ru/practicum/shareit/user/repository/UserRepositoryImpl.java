@@ -6,22 +6,23 @@ import ru.practicum.shareit.exceptions.MissingException;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
 
     private int userId = 0;
-    private final List<User> users = new ArrayList<>();
+    private final HashMap<Integer, User> users = new HashMap<>();
 
     @Override
     public List<User> getAllUsers() {
-        return users;
+        return new ArrayList<>(users.values());
     }
 
     @Override
     public User getUser(Integer userId) {
-        return users.stream()
+        return users.values().stream()
                 .filter(user -> user.getId() == userId)
                 .findFirst()
                 .orElseThrow(() -> new MissingException("No found with id: " + userId));
@@ -32,7 +33,7 @@ public class UserRepositoryImpl implements UserRepository {
         validationUsersEmail(user);
         userId++;
         user.setId(userId);
-        users.add(user);
+        users.put(userId, user);
         return user;
     }
 
@@ -47,21 +48,21 @@ public class UserRepositoryImpl implements UserRepository {
             userUpdated.setName(user.getName());
         }
         removeUser(userId);
-        users.add(userUpdated);
+        users.put(userId, userUpdated);
         return userUpdated;
     }
 
     @Override
     public void removeUser(Integer userId) {
-        User userForRemove = users.stream()
+        users.values().stream()
                 .filter(user -> user.getId() == userId)
                 .findFirst()
                 .orElseThrow(() -> new MissingException("No found with id: " + userId));
-        users.remove(userForRemove);
+        users.remove(userId);
     }
 
     private void validationUsersEmail(User user, int userId) {
-        if (users.stream()
+        if (users.values().stream()
                 .anyMatch(u -> u.getEmail()
                         .equals(user.getEmail()) && u.getId() != userId)) {
             throw new ConflictException("Email already exist");
@@ -69,7 +70,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     private void validationUsersEmail(User user) {
-        if (users.stream()
+        if (users.values().stream()
                 .anyMatch(u -> u.getEmail()
                         .equals(user.getEmail()))) {
             throw new ConflictException("Email already exist");
