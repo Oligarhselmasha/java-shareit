@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @Builder
 public class UserDto {
+    
     @NotBlank
     @NotNull
     private String name;
