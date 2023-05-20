@@ -102,8 +102,8 @@ public class BookingServiceImpl implements BookingService {
             case "ALL":
                 return bookingRepository.findByUser_IdOrderByIdDesc(userId);
             case "CURRENT":
-                return bookingRepository.findByUser_IdAndStartTimeBeforeAndEndTimeAfterOrderByStartTimeDesc
-                        (userId, LocalDateTime.now(), LocalDateTime.now());
+                return bookingRepository.findByUser_IdAndStartTimeBeforeAndEndTimeAfterOrderByStartTimeDesc(userId,
+                        LocalDateTime.now(), LocalDateTime.now());
             case "FUTURE":
                 return bookingRepository.findByUser_IdAndStartTimeAfterOrderByIdDesc(userId, LocalDateTime.now());
             case "PAST":
@@ -126,8 +126,8 @@ public class BookingServiceImpl implements BookingService {
             case "ALL":
                 return bookingRepository.findByItem_User_IdOrderByBookingIdDesc(userId);
             case "CURRENT":
-                return bookingRepository.findByItem_User_IdAndStartTimeBeforeAndEndTimeAfterOrderByBookingIdDesc
-                        (userId, LocalDateTime.now(), LocalDateTime.now());
+                return bookingRepository.findByItem_User_IdAndStartTimeBeforeAndEndTimeAfterOrderByBookingIdDesc(userId,
+                        LocalDateTime.now(), LocalDateTime.now());
             case "FUTURE":
                 return bookingRepository.findByItem_User_IdAndStartTimeAfterOrderByBookingIdDesc(userId,
                         LocalDateTime.now());

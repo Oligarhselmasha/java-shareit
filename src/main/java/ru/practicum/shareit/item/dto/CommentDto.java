@@ -2,7 +2,6 @@ package ru.practicum.shareit.item.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-import ru.practicum.shareit.item.model.Comment;
 
 import javax.persistence.Column;
 import java.time.LocalDateTime;

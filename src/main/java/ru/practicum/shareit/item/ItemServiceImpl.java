@@ -77,25 +77,19 @@ public class ItemServiceImpl implements ItemService {
         Item item = itemRepository.findById(itemId).orElseThrow(() -> {
             throw new MissingException("is not exist");
         });
-        List<Booking> bookingsLast = bookingRepository.
-                findByItem_IdAndStartTimeBeforeAndItem_User_IdOrderByEndTimeDesc(itemId,
+        List<Booking> bookingsLast = bookingRepository.findByItem_IdAndStartTimeBeforeAndItem_User_IdOrderByEndTimeDesc(itemId,
                         LocalDateTime.now(), userId);
         if (!bookingsLast.isEmpty()) {
-            Booking lastBooking = bookingsLast.stream().
-                    findFirst()
-                    .orElseThrow();
+            Booking lastBooking = bookingsLast.stream().findFirst().orElseThrow();
             BookingDto lastBookingDto = new BookingDto();
             lastBookingDto.setBookingId(lastBooking.getBookingId());
             lastBookingDto.setBookerId(lastBooking.getUser().getId());
             item.setLastBooking(lastBookingDto);
         }
-        List<Booking> bookingsNext = bookingRepository.
-                findByItem_IdAndStartTimeAfterAndItem_User_IdIdAndStatusOrderByStartTimeAsc(itemId, LocalDateTime.now(),
+        List<Booking> bookingsNext = bookingRepository.findByItem_IdAndStartTimeAfterAndItem_User_IdIdAndStatusOrderByStartTimeAsc(itemId, LocalDateTime.now(),
                         userId, BookingStatus.APPROVED);
         if (!bookingsNext.isEmpty()) {
-            Booking nextBooking = bookingsNext.stream().
-                    findFirst()
-                    .orElseThrow();
+            Booking nextBooking = bookingsNext.stream().findFirst().orElseThrow();
             BookingDto nextBookingDto = new BookingDto();
             nextBookingDto.setBookingId(nextBooking.getBookingId());
             nextBookingDto.setBookerId(nextBooking.getUser().getId());
@@ -104,10 +98,7 @@ public class ItemServiceImpl implements ItemService {
         List<Comment> comments = commentRepository.findByItem_Id(itemId);
         List<CommentDto> commentDtos = new ArrayList<>();
         comments.forEach(comment -> commentDtos.add(commentMapper.toCommentDto(comment)));
-        commentDtos.forEach(c -> c.setAuthorName(commentRepository.findById(c.getId()).
-                orElseThrow().
-                getAuthor().
-                getName()));
+        commentDtos.forEach(c -> c.setAuthorName(commentRepository.findById(c.getId()).orElseThrow().getAuthor().getName()));
         item.setComments(commentDtos);
         return item;
     }
