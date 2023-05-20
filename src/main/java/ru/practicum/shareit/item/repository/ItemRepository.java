@@ -1,19 +1,18 @@
 package ru.practicum.shareit.item.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.List;
 
-public interface ItemRepository {
-    Item createItem(Item item);
+public interface ItemRepository extends JpaRepository<Item, Integer> {
+    @Query("select i from Item i where i.user.id = ?1")
+    List<Item> findByUser_Id(int id);
 
-    Item updateItem(Item item);
+    @Query("select i from Item i where upper(i.description) like upper(concat('%', ?1, '%')) and i.isFree = true")
+    List<Item> findByDescriptionContainsIgnoreCaseAndIsFreeTrue(String description);
 
-    Item getItem(Integer itemId);
 
-    void removeItem(Integer itemId);
 
-    List<Item> getUsersItems(Long userId);
-
-    List<Item> getItemByQuery(Long userId, String text);
 }

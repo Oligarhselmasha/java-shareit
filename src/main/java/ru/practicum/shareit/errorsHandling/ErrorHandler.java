@@ -1,5 +1,6 @@
 package ru.practicum.shareit.errorsHandling;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -7,6 +8,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.practicum.shareit.exceptions.ConflictException;
 import ru.practicum.shareit.exceptions.MissingException;
 import ru.practicum.shareit.exceptions.ValidationException;
+
 
 @RestControllerAdvice
 public class ErrorHandler {
@@ -35,8 +37,8 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleException(final Throwable throwable) {
-        return new ErrorResponse(throwable.getMessage());
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponse handleException(final ConstraintViolationException constraintViolationException) {
+        return new ErrorResponse(constraintViolationException.getMessage());
     }
 }
