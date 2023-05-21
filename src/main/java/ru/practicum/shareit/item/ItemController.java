@@ -1,16 +1,8 @@
 package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 
@@ -18,6 +10,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 import static ru.practicum.shareit.constants.Variables.USER_HEADER;
+
 
 @RestController
 @RequestMapping("/items")
@@ -32,25 +25,31 @@ public class ItemController {
         return itemService.createItem(itemDto, userId);
     }
 
+    @PostMapping("/{itemId}/comment")
+    public CommentDto createItemsComment(@RequestHeader(USER_HEADER) Integer userId,
+                                         @Valid @RequestBody CommentDto commentDto, @PathVariable("itemId") Integer itemId) {
+        return itemService.createItemsComment(commentDto, userId, itemId);
+    }
+
     @PatchMapping("/{itemId}")
-    public Item updateItem(@RequestHeader(USER_HEADER) Long userId,
+    public Item updateItem(@RequestHeader(USER_HEADER) Integer userId,
                            @RequestBody ItemDto itemDto, @PathVariable("itemId") Integer itemId) {
         return itemService.updateItem(itemDto, userId, itemId);
     }
 
     @GetMapping("/{itemId}")
-    public Item getItem(@PathVariable("itemId") Integer itemId) {
-        return itemService.getItem(itemId);
+    public Item getItem(@RequestHeader(USER_HEADER) Integer userId, @PathVariable("itemId") Integer itemId) {
+        return itemService.getItem(itemId, userId);
     }
 
     @DeleteMapping("/{itemId}")
-    public void removeItem(@RequestHeader(USER_HEADER) Long userId,
+    public void removeItem(@RequestHeader(USER_HEADER) Integer userId,
                            @PathVariable("itemId") Integer itemId) {
         itemService.removeItem(userId, itemId);
     }
 
     @GetMapping
-    public List<Item> getUsersItems(@RequestHeader(USER_HEADER) Long userId) {
+    public List<Item> getUsersItems(@RequestHeader(USER_HEADER) Integer userId) {
         return itemService.getUsersItems(userId);
     }
 
