@@ -9,9 +9,6 @@ import java.util.List;
 
 import static ru.practicum.shareit.constants.Variables.USER_HEADER;
 
-/**
- * TODO Sprint add-bookings.
- */
 @RestController
 @RequestMapping(path = "/bookings")
 @RequiredArgsConstructor

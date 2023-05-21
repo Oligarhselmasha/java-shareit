@@ -61,4 +61,9 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
             "where b.item.id = ?1 and b.user.id = ?2 and b.status = ?3 and b.endTime < ?4")
     boolean existsByItem_IdAndUser_IdAndStatusAndEndTimeBefore(Integer id, int id1, BookingStatus status,
                                                                                         LocalDateTime endTime);
+
+    @Query("select b from Booking b where b.item.user.id = ?1 and b.startTime > ?2 order by b.item.user.name DESC")
+    List<Booking> findByItem_User_IdAndStartTimeAfterOrderByItem_User_NameDesc(int id, LocalDateTime startTime);
+
+
 }

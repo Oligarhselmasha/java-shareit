@@ -1,5 +1,6 @@
 package ru.practicum.shareit.booking;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
@@ -23,10 +24,12 @@ public class Booking {
 
     @Column
     @JsonProperty("start")
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private LocalDateTime startTime;
 
     @Column
     @JsonProperty("end")
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private LocalDateTime endTime;
 
     @ManyToOne(fetch = FetchType.EAGER)

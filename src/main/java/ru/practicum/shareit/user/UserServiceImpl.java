@@ -34,9 +34,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUser(Integer userId) {
-        return repository.findById(userId).orElseThrow(() -> {
-            throw new MissingException("is not exist");
-        });
+        return repository.findById(userId).orElseThrow(() ->
+                new MissingException("is not exist"));
     }
 
     @Override

@@ -1,14 +1,12 @@
 package ru.practicum.shareit.booking.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-/**
- * TODO Sprint add-bookings.
- */
 @Getter
 @Setter
 @Builder
@@ -24,10 +22,12 @@ public class BookingDto {
 
     @NotNull
     @JsonProperty("start")
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private LocalDateTime startTime;
 
     @NotNull
     @JsonProperty("end")
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private LocalDateTime endTime;
 
     private Integer bookerId;

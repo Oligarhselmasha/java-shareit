@@ -29,9 +29,8 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public Booking createBooking(BookingDto bookingDto, Integer userId) {
         Booking booking = bookingMapper.toBooking(bookingDto);
-        Item bookingsItem = itemRepository.findById(bookingDto.getItemId()).orElseThrow(() -> {
-            throw new MissingException("is not exist");
-        });
+        Item bookingsItem = itemRepository.findById(bookingDto.getItemId()).orElseThrow(() ->
+                new MissingException("is not exist"));
         if (bookingsItem.getUser().getId() == userId) {
             throw new MissingException("is bookers item");
         }
@@ -45,9 +44,8 @@ public class BookingServiceImpl implements BookingService {
             throw new ValidationException("thing isn't available");
         }
         booking.setItem(bookingsItem);
-        User bookingsUser = userRepository.findById(userId).orElseThrow(() -> {
-            throw new MissingException("is not exist");
-        });
+        User bookingsUser = userRepository.findById(userId).orElseThrow(() ->
+                new MissingException("is not exist"));
         booking.setUser(bookingsUser);
         booking.setStatus(BookingStatus.WAITING);
         return bookingRepository.save(booking);
@@ -75,9 +73,8 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public Booking getBooking(Integer bookingId) {
-        return bookingRepository.findById(bookingId).orElseThrow(() -> {
-            throw new MissingException("is not exist");
-        });
+        return bookingRepository.findById(bookingId).orElseThrow(() ->
+                new MissingException("is not exist"));
     }
 
 
@@ -95,9 +92,8 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<Booking> getBookings(Integer userId, @NotNull String state) {
-        userRepository.findById(userId).orElseThrow(() -> {
-            throw new MissingException("is not exist");
-        });
+        userRepository.findById(userId).orElseThrow(() ->
+                new MissingException("is not exist"));
         switch (state) {
             case "ALL":
                 return bookingRepository.findByUser_IdOrderByIdDesc(userId);

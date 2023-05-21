@@ -39,17 +39,15 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Item createItem(ItemDto itemDto, Integer userId) {
         Item item = itemMapper.toItem(itemDto);
-        item.setUser(userRepository.findById(userId).orElseThrow(() -> {
-            throw new MissingException("is not exist");
-        }));
+        item.setUser(userRepository.findById(userId).orElseThrow(() ->
+                new MissingException("is not exist")));
         return itemRepository.save(item);
     }
 
     @Override
     public Item updateItem(@NotNull ItemDto itemDto, Integer userId, Integer itemId) {
-        Item itemBeforeUpdate = itemRepository.findById(itemId).orElseThrow(() -> {
-            throw new MissingException("is not exist");
-        });
+        Item itemBeforeUpdate = itemRepository.findById(itemId).orElseThrow(() ->
+                new MissingException("is not exist"));
         if (itemDto.getId() == null) {
             itemDto.setId(itemId);
         }
@@ -63,9 +61,8 @@ public class ItemServiceImpl implements ItemService {
             itemDto.setIsFree(itemBeforeUpdate.getIsFree());
         }
         Item item = itemMapper.toItem(itemDto);
-        item.setUser(userRepository.findById(userId).orElseThrow(() -> {
-            throw new MissingException("is not exist");
-        }));
+        item.setUser(userRepository.findById(userId).orElseThrow(() ->
+            new MissingException("is not exist")));
         if (itemRepository.findById(itemId).orElseThrow().getUser().getId() != userId) {
             throw new MissingException("Isn't user's thing");
         }
@@ -74,11 +71,10 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Item getItem(Integer itemId, Integer userId) {
-        Item item = itemRepository.findById(itemId).orElseThrow(() -> {
-            throw new MissingException("is not exist");
-        });
+        Item item = itemRepository.findById(itemId).orElseThrow(() ->
+                new MissingException("is not exist"));
         List<Booking> bookingsLast = bookingRepository.findByItem_IdAndStartTimeBeforeAndItem_User_IdOrderByEndTimeDesc(itemId,
-                        LocalDateTime.now(), userId);
+                LocalDateTime.now(), userId);
         if (!bookingsLast.isEmpty()) {
             Booking lastBooking = bookingsLast.stream().findFirst().orElseThrow();
             BookingDto lastBookingDto = new BookingDto();
@@ -87,7 +83,7 @@ public class ItemServiceImpl implements ItemService {
             item.setLastBooking(lastBookingDto);
         }
         List<Booking> bookingsNext = bookingRepository.findByItem_IdAndStartTimeAfterAndItem_User_IdIdAndStatusOrderByStartTimeAsc(itemId, LocalDateTime.now(),
-                        userId, BookingStatus.APPROVED);
+                userId, BookingStatus.APPROVED);
         if (!bookingsNext.isEmpty()) {
             Booking nextBooking = bookingsNext.stream().findFirst().orElseThrow();
             BookingDto nextBookingDto = new BookingDto();
