@@ -35,13 +35,17 @@ public class BookingController {
 
     @GetMapping()
     public List<Booking> getBookings(@RequestHeader(USER_HEADER) Integer userId, @RequestParam(defaultValue = "ALL",
-            required = false) String state) {
-        return bookingService.getBookings(userId, state);
+            required = false) String state,
+                                     @RequestParam(defaultValue = "null", required = false) String from,
+                                     @RequestParam(defaultValue = "null", required = false) String size) {
+        return bookingService.getBookingsPagged(userId, state, from, size);
     }
 
     @GetMapping("/owner")
     public List<Booking> getOwnersBookings(@RequestHeader(USER_HEADER) Integer userId,
-                                           @RequestParam(defaultValue = "ALL", required = false) String state) {
-        return bookingService.getOwnersBookings(userId, state);
+                                           @RequestParam(defaultValue = "ALL", required = false) String state,
+                                           @RequestParam(defaultValue = "null", required = false) String from,
+                                           @RequestParam(defaultValue = "null", required = false) String size) {
+        return bookingService.getOwnersBookingsPagged(userId, state, from, size);
     }
 }

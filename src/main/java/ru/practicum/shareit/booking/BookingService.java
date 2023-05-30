@@ -16,4 +16,8 @@ public interface BookingService {
     List<Booking> getBookings(Integer userId, String state);
 
     List<Booking> getOwnersBookings(Integer userId, String state);
+
+    List<Booking> getBookingsPagged(Integer userId, String state, String from, String size);
+
+    List<Booking> getOwnersBookingsPagged(Integer userId, String state, String from, String size);
 }

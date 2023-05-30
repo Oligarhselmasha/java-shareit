@@ -138,4 +138,35 @@ public class BookingServiceImpl implements BookingService {
                 throw new ValidationException("Unknown state: UNSUPPORTED_STATUS");
         }
     }
+
+    @Override
+    public List<Booking> getBookingsPagged(Integer userId, String state, String from, String size) {
+        List<Booking> bookings = getBookings(userId, state);
+        return makePagging(bookings, from, size);
+    }
+
+    @Override
+    public List<Booking> getOwnersBookingsPagged(Integer userId, String state, String from, String size) {
+        List<Booking> bookings = getOwnersBookings(userId, state);
+        return makePagging(bookings, from, size);
+    }
+
+    private List<Booking> makePagging(List<Booking> bookings, String from, String size) {
+        if (from.equals("null") || size.equals("null")) {
+            return bookings;
+        }
+        int fromInt = Integer.parseInt(from);
+        int sizeInt = Integer.parseInt(size);
+        if (fromInt < 0 || sizeInt <= 0) {
+            throw new ValidationException("wrong parameters");
+        }
+        List<Booking> bookingForReceive;
+        if (fromInt + sizeInt > bookings.size()) {
+            sizeInt = bookings.size();
+            bookingForReceive = bookings.subList(fromInt, sizeInt);
+            return bookingForReceive;
+        }
+        bookingForReceive = bookings.subList(fromInt, fromInt + sizeInt);
+        return bookingForReceive;
+    }
 }

@@ -31,5 +31,4 @@ public class BookingDto {
     private LocalDateTime endTime;
 
     private Integer bookerId;
-
 }
