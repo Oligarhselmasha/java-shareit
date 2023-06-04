@@ -7,7 +7,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -85,6 +84,7 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.email", is(user.getEmail())))
                 .andExpect(jsonPath("$.name", is(user.getName())));
     }
+
     @Test
     void createBadUser() throws Exception {
         when(userService.createUser(any()))
@@ -98,6 +98,7 @@ class UserControllerTest {
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().is4xxClientError());
     }
+
     @Test
     void getAllUsers() throws Exception {
         when(userService.getAllUsers())
@@ -125,7 +126,6 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.email", is(user.getEmail())))
                 .andExpect(jsonPath("$.name", is(user.getName())));
     }
-
 
 
     @Test

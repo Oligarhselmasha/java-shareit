@@ -5,10 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.json.JsonContent;
-import ru.practicum.shareit.user.dto.UserDto;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @JsonTest
 class UserTest {
@@ -17,10 +15,10 @@ class UserTest {
 
     @Test
     void testUserDto() throws Exception {
-        User user = new User(                1,
+        User user = new User(1,
                 "Kirill",
                 "kirill-bulanov@yandex.ru"
-                );
+        );
 
         JsonContent<User> result = json.write(user);
 
