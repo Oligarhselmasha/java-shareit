@@ -45,7 +45,7 @@ class UserServiceImplTest {
         List<User> users =  service.getAllUsers();
         assertThat(users, hasItem(user));
         assertThat(users.get(0), allOf(hasProperty("email", equalTo("kirill-bulanov@yandex.ru"))));
-        assertThat(users.get(0), allOf(hasProperty("id", equalTo(1))));
+        assertThat(users.get(0), allOf(hasProperty("id", equalTo(user.getId()))));
         assertThat(users.get(0), allOf(hasProperty("name", equalTo("Кирилл"))));
     }
 
