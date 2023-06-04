@@ -1,6 +1,8 @@
 package ru.practicum.shareit.user.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -12,7 +14,8 @@ import javax.validation.constraints.NotNull;
 @Setter
 @Entity
 @Table(name = "users")
-
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,4 +31,5 @@ public class User {
     @Email
     @Column(unique = true)
     private String email;
+
 }
