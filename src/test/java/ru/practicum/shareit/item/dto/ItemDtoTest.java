@@ -8,16 +8,15 @@ import org.springframework.boot.test.json.JsonContent;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.user.model.User;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @JsonTest
 class ItemDtoTest {
     @Autowired
     private JacksonTester<ItemDto> json;
+
     @Test
     void testItemDto() throws Exception {
         ItemDto itemDto = new ItemDto();

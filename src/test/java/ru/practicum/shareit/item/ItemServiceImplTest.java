@@ -300,6 +300,6 @@ class ItemServiceImplTest {
         dtoIn.setUser(user);
         ItemDto itemDtoOut = service.createItem(dtoIn, user.getId());
         assertThatExceptionOfType(ValidationException.class)
-                .isThrownBy(() -> service.removeItem(user.getId()*(-1), itemDtoOut.getId()));
+                .isThrownBy(() -> service.removeItem(user.getId() * (-1), itemDtoOut.getId()));
     }
 }

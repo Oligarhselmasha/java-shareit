@@ -87,6 +87,7 @@ class UserServiceImplTest {
         User userForCheck = service.updateUser(userDto, user.getId());
         assertThat(userForCheck, allOf(hasProperty("email", equalTo("kirill-bulanov@mail.ru"))));
     }
+
     @Test
     void updateUserEmailIsNull() {
         UserDto userDto = makeUserDto();
@@ -126,7 +127,7 @@ class UserServiceImplTest {
         UserDto userDtoAnother = makeUserDto();
         userDtoAnother.setEmail("kirill-bulanov@mail.ru");
         assertThatExceptionOfType(ConflictException.class)
-                .isThrownBy(() -> service.updateUser(userDtoAnother, user.getId()+1));
+                .isThrownBy(() -> service.updateUser(userDtoAnother, user.getId() + 1));
     }
 
     @Test

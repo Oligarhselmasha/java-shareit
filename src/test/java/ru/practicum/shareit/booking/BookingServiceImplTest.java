@@ -315,7 +315,7 @@ class BookingServiceImplTest {
         Booking booking = service.createBooking(bookingDto, anotherUser.getId());
         service.updateBooking(user.getId(), booking.getBookingId(), false);
         assertThatExceptionOfType(MissingException.class)
-                .isThrownBy(() -> service.getBookings(anotherUser.getId()*(-1), "REJECTED"));
+                .isThrownBy(() -> service.getBookings(anotherUser.getId() * (-1), "REJECTED"));
     }
 
     @Test
@@ -369,7 +369,7 @@ class BookingServiceImplTest {
         Booking booking = service.createBooking(bookingDto, anotherUser.getId());
         service.updateBooking(user.getId(), booking.getBookingId(), false);
         assertThatExceptionOfType(MissingException.class)
-                .isThrownBy(() -> service.getOwnersBookings(user.getId()*(-1), "REJECTED"));
+                .isThrownBy(() -> service.getOwnersBookings(user.getId() * (-1), "REJECTED"));
     }
 
     @Test
