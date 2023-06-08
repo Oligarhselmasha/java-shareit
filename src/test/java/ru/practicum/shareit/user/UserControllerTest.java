@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import ru.practicum.shareit.errorsHandling.ErrorHandler;
+import ru.practicum.shareit.exceptions.ConflictException;
 import ru.practicum.shareit.exceptions.ValidationException;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
@@ -127,7 +128,6 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.name", is(user.getName())));
     }
 
-
     @Test
     void updateUser() throws Exception {
         userDto.setEmail("kirill-bulanov@yandex.ru");
@@ -142,6 +142,19 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.id", is(userUpdated.getId()), Integer.class))
                 .andExpect(jsonPath("$.email", is(userUpdated.getEmail())))
                 .andExpect(jsonPath("$.name", is(userUpdated.getName())));
+    }
+
+    @Test
+    void updateUserConflict() throws Exception {
+        userDto.setEmail("kirill-bulanov@yandex.ru");
+        when(userService.updateUser(any(), anyInt()))
+                .thenThrow(ConflictException.class);
+        mvc.perform(patch("/users/1")
+                        .content(mapper.writeValueAsString(userDto))
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError());
     }
 
     @Test

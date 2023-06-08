@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @JsonTest
 class RequestTest {
@@ -20,7 +19,7 @@ class RequestTest {
     private JacksonTester<Request> json;
 
     @Test
-    void testUserDto() throws Exception {
+    void testRequest() throws Exception {
         Item item = new Item();
         item.setName("вещь");
         Request request = new Request();

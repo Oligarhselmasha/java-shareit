@@ -68,7 +68,7 @@ public class RequestServiceImpl implements RequestService {
             throw new ValidationException("wrong parameters");
         }
         List<ItemRequestFrontDto> requestForReceive;
-        if (fromInt + sizeInt > itemRequestFrontDtos.size()) {
+        if (fromInt + sizeInt >= itemRequestFrontDtos.size()) {
             sizeInt = itemRequestFrontDtos.size();
             requestForReceive = itemRequestFrontDtos.subList(fromInt, sizeInt);
             return requestForReceive;

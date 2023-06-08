@@ -98,7 +98,6 @@ class ItemRequestControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(itemRequestFrontDto.getId()), Integer.class))
-//                .andExpect(jsonPath("$.created", is(itemRequestFrontDto.getCreated().toString())))
                 .andExpect(jsonPath("$.description", is(itemRequestFrontDto.getDescription())));
     }
 
@@ -113,7 +112,6 @@ class ItemRequestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].description", is(itemRequestFrontDtos.get(0).getDescription())))
                 .andExpect(jsonPath("$[0].id", is(itemRequestFrontDtos.get(0).getId())));
-//                .andExpect(jsonPath("$[0].created", is(itemRequestFrontDtos.get(0).getCreated().toString())));
     }
 
     @Test
@@ -127,7 +125,6 @@ class ItemRequestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].description", is(itemRequestFrontDtos.get(0).getDescription())))
                 .andExpect(jsonPath("$[0].id", is(itemRequestFrontDtos.get(0).getId())));
-//                .andExpect(jsonPath("$[0].created", is(itemRequestFrontDtos.get(0).getCreated().toString())));
     }
 
     @Test

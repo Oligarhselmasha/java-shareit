@@ -161,7 +161,7 @@ public class BookingServiceImpl implements BookingService {
             throw new ValidationException("wrong parameters");
         }
         List<Booking> bookingForReceive;
-        if (fromInt + sizeInt > bookings.size()) {
+        if (fromInt + sizeInt >= bookings.size()) {
             sizeInt = bookings.size();
             bookingForReceive = bookings.subList(fromInt, sizeInt);
             return bookingForReceive;

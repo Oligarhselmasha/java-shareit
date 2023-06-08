@@ -143,20 +143,22 @@ public class ItemServiceImpl implements ItemService {
         if (commentDto.getText().isBlank() || commentDto.getText().isEmpty()) {
             throw new ValidationException("text is empty");
         }
+        List<Booking> bookings =  bookingRepository.findAll();
         if (bookingRepository.existsByItem_IdAndUser_IdAndStatusAndEndTimeBefore(itemId, userId, BookingStatus.APPROVED,
                 LocalDateTime.now())) {
-            Comment comment = new Comment();
-            comment.setItem(itemRepository.findById(itemId).orElseThrow());
-            User author = userRepository.findById(userId).orElseThrow();
-            comment.setAuthor(author);
-            comment.setText(commentDto.getText());
-            comment.setCreated(LocalDateTime.now());
-            commentRepository.save(comment);
-            commentDto = commentMapper.toCommentDto(comment);
-            commentDto.setAuthorName(author.getName());
-        } else {
-            throw new ValidationException("booking ist exist");
-        }
+                Comment comment = new Comment();
+                comment.setItem(itemRepository.findById(itemId).orElseThrow());
+                User author = userRepository.findById(userId).orElseThrow();
+                comment.setAuthor(author);
+                comment.setText(commentDto.getText());
+                comment.setCreated(LocalDateTime.now());
+                commentRepository.save(comment);
+                commentDto = commentMapper.toCommentDto(comment);
+                commentDto.setAuthorName(author.getName());
+            } else {
+                throw new ValidationException("booking ist exist");
+            }
+
         return commentDto;
     }
 

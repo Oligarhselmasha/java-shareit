@@ -1,6 +1,5 @@
 package ru.practicum.shareit.errorsHandling;
 
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -34,11 +33,5 @@ public class ErrorHandler {
         return new ErrorResponse(
                 conflictException.getMessage()
         );
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handleException(final ConstraintViolationException constraintViolationException) {
-        return new ErrorResponse(constraintViolationException.getMessage());
     }
 }
