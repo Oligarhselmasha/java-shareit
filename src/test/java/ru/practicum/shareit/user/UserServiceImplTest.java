@@ -76,7 +76,7 @@ class UserServiceImplTest {
         service.createUser(userDto);
         List<User> usersAll = service.getAllUsers();
         assertThatExceptionOfType(MissingException.class)
-                .isThrownBy(() -> service.getUser(usersAll.get(0).getId()*(-1)));
+                .isThrownBy(() -> service.getUser(usersAll.get(0).getId() * (-1)));
     }
 
     @Test
@@ -123,7 +123,7 @@ class UserServiceImplTest {
     void updateSameUserIsExist() {
         UserDto userDto = makeUserDto();
         userDto.setEmail("kirill-bulanov@mail.ru");
-        User user =  service.createUser(userDto);
+        User user = service.createUser(userDto);
         UserDto userDtoAnother = makeUserDto();
         userDtoAnother.setEmail("kirill-bulanov@mail.ru");
         assertThatExceptionOfType(ConflictException.class)
