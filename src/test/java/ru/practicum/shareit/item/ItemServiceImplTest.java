@@ -130,7 +130,7 @@ class ItemServiceImplTest {
         bookingDto.setBookerId(user.getId());
         bookingDto.setStartTime(LocalDateTime.now().plusSeconds(1));
         bookingDto.setEndTime(LocalDateTime.now().plusSeconds(2));
-        Booking booking = bookingService.createBooking(bookingDto, anotherUser.getId());
+        BookingDto booking = bookingService.createBooking(bookingDto, anotherUser.getId());
         bookingService.updateBooking(user.getId(), booking.getBookingId(), true);
 
         ItemDto dtoOut = service.getItem(dtoOutCreated.getId(), user.getId());
@@ -150,7 +150,7 @@ class ItemServiceImplTest {
         bookingDto.setBookerId(user.getId());
         bookingDto.setStartTime(LocalDateTime.now().plusSeconds(1));
         bookingDto.setEndTime(LocalDateTime.now().plusSeconds(2));
-        Booking booking = bookingService.createBooking(bookingDto, anotherUser.getId());
+        BookingDto booking = bookingService.createBooking(bookingDto, anotherUser.getId());
         bookingService.updateBooking(user.getId(), booking.getBookingId(), true);
 
         Thread.sleep(3000);
@@ -171,7 +171,7 @@ class ItemServiceImplTest {
         bookingDto.setBookerId(user.getId());
         bookingDto.setStartTime(LocalDateTime.now().plusSeconds(1));
         bookingDto.setEndTime(LocalDateTime.now().plusSeconds(2));
-        Booking booking = bookingService.createBooking(bookingDto, anotherUser.getId());
+        BookingDto booking = bookingService.createBooking(bookingDto, anotherUser.getId());
         bookingService.updateBooking(user.getId(), booking.getBookingId(), true);
 
         assertThatExceptionOfType(MissingException.class)
@@ -223,7 +223,7 @@ class ItemServiceImplTest {
         bookingDto.setBookerId(user.getId());
         bookingDto.setStartTime(LocalDateTime.now().plusSeconds(1));
         bookingDto.setEndTime(LocalDateTime.now().plusSeconds(2));
-        Booking booking = bookingService.createBooking(bookingDto, anotherUser.getId());
+        BookingDto booking = bookingService.createBooking(bookingDto, anotherUser.getId());
         bookingService.updateBooking(user.getId(), booking.getBookingId(), true);
 
 
@@ -250,7 +250,7 @@ class ItemServiceImplTest {
         bookingDto.setBookerId(user.getId());
         bookingDto.setStartTime(LocalDateTime.now().plusSeconds(1));
         bookingDto.setEndTime(LocalDateTime.now().plusSeconds(2));
-        Booking booking = bookingService.createBooking(bookingDto, anotherUser.getId());
+        BookingDto booking = bookingService.createBooking(bookingDto, anotherUser.getId());
         bookingService.updateBooking(user.getId(), booking.getBookingId(), true);
 
 

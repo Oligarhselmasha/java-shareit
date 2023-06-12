@@ -53,7 +53,7 @@ class BookingServiceImplTest {
         itemDto.setIsFree(true);
         ItemDto item = itemService.createItem(itemDto, user.getId());
         bookingDto.setItemId(item.getId());
-        Booking booking = service.createBooking(bookingDto, anotherUser.getId());
+        BookingDto booking = service.createBooking(bookingDto, anotherUser.getId());
         assertThat(booking.getBookingId(), notNullValue());
         assertThat(booking.getUser().getId(), is(anotherUser.getId()));
         assertThat(booking.getItem().getName(), is(itemDto.getName()));
@@ -157,8 +157,8 @@ class BookingServiceImplTest {
         itemDto.setIsFree(true);
         ItemDto item = itemService.createItem(itemDto, user.getId());
         bookingDto.setItemId(item.getId());
-        Booking booking = service.createBooking(bookingDto, anotherUser.getId());
-        Booking bookingForCheck = service.updateBooking(user.getId(), booking.getBookingId(), false);
+        BookingDto booking = service.createBooking(bookingDto, anotherUser.getId());
+        BookingDto bookingForCheck = service.updateBooking(user.getId(), booking.getBookingId(), false);
         assertThat(bookingForCheck.getBookingId(), notNullValue());
         assertThat(bookingForCheck.getUser().getId(), is(anotherUser.getId()));
         assertThat(bookingForCheck.getItem().getName(), is(itemDto.getName()));
@@ -176,7 +176,7 @@ class BookingServiceImplTest {
         itemDto.setIsFree(true);
         ItemDto item = itemService.createItem(itemDto, user.getId());
         bookingDto.setItemId(item.getId());
-        Booking booking = service.createBooking(bookingDto, anotherUser.getId());
+        BookingDto booking = service.createBooking(bookingDto, anotherUser.getId());
         assertThatExceptionOfType(MissingException.class)
                 .isThrownBy(() -> service.updateBooking(user.getId() * (-1), booking.getBookingId(), false));
     }
@@ -192,7 +192,7 @@ class BookingServiceImplTest {
         itemDto.setIsFree(true);
         ItemDto item = itemService.createItem(itemDto, user.getId());
         bookingDto.setItemId(item.getId());
-        Booking booking = service.createBooking(bookingDto, anotherUser.getId());
+        BookingDto booking = service.createBooking(bookingDto, anotherUser.getId());
         assertThatExceptionOfType(MissingException.class)
                 .isThrownBy(() -> service.updateBooking(user.getId(), booking.getBookingId() * (-1), false));
     }
@@ -208,7 +208,7 @@ class BookingServiceImplTest {
         itemDto.setIsFree(true);
         ItemDto item = itemService.createItem(itemDto, user.getId());
         bookingDto.setItemId(item.getId());
-        Booking booking = service.createBooking(bookingDto, anotherUser.getId());
+        BookingDto booking = service.createBooking(bookingDto, anotherUser.getId());
         service.updateBooking(user.getId(), booking.getBookingId(), false);
         assertThatExceptionOfType(ValidationException.class)
                 .isThrownBy(() -> service.updateBooking(user.getId(), booking.getBookingId(), false));
@@ -225,7 +225,7 @@ class BookingServiceImplTest {
         itemDto.setIsFree(true);
         ItemDto item = itemService.createItem(itemDto, user.getId());
         bookingDto.setItemId(item.getId());
-        Booking booking = service.createBooking(bookingDto, anotherUser.getId());
+        BookingDto booking = service.createBooking(bookingDto, anotherUser.getId());
         service.updateBooking(user.getId(), booking.getBookingId(), true);
         assertThatExceptionOfType(ValidationException.class)
                 .isThrownBy(() -> service.updateBooking(user.getId(), booking.getBookingId(), true));
@@ -242,7 +242,7 @@ class BookingServiceImplTest {
         itemDto.setIsFree(true);
         ItemDto item = itemService.createItem(itemDto, user.getId());
         bookingDto.setItemId(item.getId());
-        Booking booking = service.createBooking(bookingDto, anotherUser.getId());
+        BookingDto booking = service.createBooking(bookingDto, anotherUser.getId());
         assertThatExceptionOfType(MissingException.class)
                 .isThrownBy(() -> service.getBooking(booking.getBookingId() * (-1), user.getId()));
     }
@@ -258,8 +258,8 @@ class BookingServiceImplTest {
         itemDto.setIsFree(true);
         ItemDto item = itemService.createItem(itemDto, user.getId());
         bookingDto.setItemId(item.getId());
-        Booking booking = service.createBooking(bookingDto, anotherUser.getId());
-        Booking bookingForCheck = service.getBooking(booking.getBookingId(), user.getId());
+        BookingDto booking = service.createBooking(bookingDto, anotherUser.getId());
+        BookingDto bookingForCheck = service.getBooking(booking.getBookingId(), user.getId());
         assertThat(bookingForCheck.getBookingId(), notNullValue());
         assertThat(bookingForCheck.getUser().getId(), is(anotherUser.getId()));
         assertThat(bookingForCheck.getItem().getName(), is(itemDto.getName()));
@@ -276,7 +276,7 @@ class BookingServiceImplTest {
         itemDto.setIsFree(true);
         ItemDto item = itemService.createItem(itemDto, user.getId());
         bookingDto.setItemId(item.getId());
-        Booking booking = service.createBooking(bookingDto, anotherUser.getId());
+        BookingDto booking = service.createBooking(bookingDto, anotherUser.getId());
         assertThatExceptionOfType(MissingException.class)
                 .isThrownBy(() -> service.getBooking(booking.getBookingId(), user.getId() * (-1)));
     }
@@ -292,9 +292,9 @@ class BookingServiceImplTest {
         itemDto.setIsFree(true);
         ItemDto item = itemService.createItem(itemDto, user.getId());
         bookingDto.setItemId(item.getId());
-        Booking booking = service.createBooking(bookingDto, anotherUser.getId());
+        BookingDto booking = service.createBooking(bookingDto, anotherUser.getId());
         service.updateBooking(user.getId(), booking.getBookingId(), false);
-        List<Booking> bookingsForCheck = service.getBookings(anotherUser.getId(), "REJECTED");
+        List<BookingDto> bookingsForCheck = service.getBookings(anotherUser.getId(), "REJECTED");
         assertThat(bookingsForCheck.get(0).getBookingId(), notNullValue());
         assertThat(bookingsForCheck.get(0).getUser().getId(), is(anotherUser.getId()));
         assertThat(bookingsForCheck.get(0).getItem().getName(), is(itemDto.getName()));
@@ -312,7 +312,7 @@ class BookingServiceImplTest {
         itemDto.setIsFree(true);
         ItemDto item = itemService.createItem(itemDto, user.getId());
         bookingDto.setItemId(item.getId());
-        Booking booking = service.createBooking(bookingDto, anotherUser.getId());
+        BookingDto booking = service.createBooking(bookingDto, anotherUser.getId());
         service.updateBooking(user.getId(), booking.getBookingId(), false);
         assertThatExceptionOfType(MissingException.class)
                 .isThrownBy(() -> service.getBookings(anotherUser.getId() * (-1), "REJECTED"));
@@ -329,7 +329,7 @@ class BookingServiceImplTest {
         itemDto.setIsFree(true);
         ItemDto item = itemService.createItem(itemDto, user.getId());
         bookingDto.setItemId(item.getId());
-        Booking booking = service.createBooking(bookingDto, anotherUser.getId());
+        BookingDto booking = service.createBooking(bookingDto, anotherUser.getId());
         service.updateBooking(user.getId(), booking.getBookingId(), false);
         assertThatExceptionOfType(ValidationException.class)
                 .isThrownBy(() -> service.getBookings(anotherUser.getId(), "DGFSBVGDSD"));
@@ -346,9 +346,9 @@ class BookingServiceImplTest {
         itemDto.setIsFree(true);
         ItemDto item = itemService.createItem(itemDto, user.getId());
         bookingDto.setItemId(item.getId());
-        Booking booking = service.createBooking(bookingDto, anotherUser.getId());
+        BookingDto booking = service.createBooking(bookingDto, anotherUser.getId());
         service.updateBooking(user.getId(), booking.getBookingId(), false);
-        List<Booking> bookingsForCheck = service.getOwnersBookings(user.getId(), "REJECTED");
+        List<BookingDto> bookingsForCheck = service.getOwnersBookings(user.getId(), "REJECTED");
         assertThat(bookingsForCheck.get(0).getBookingId(), notNullValue());
         assertThat(bookingsForCheck.get(0).getUser().getId(), is(anotherUser.getId()));
         assertThat(bookingsForCheck.get(0).getItem().getName(), is(itemDto.getName()));
@@ -366,7 +366,7 @@ class BookingServiceImplTest {
         itemDto.setIsFree(true);
         ItemDto item = itemService.createItem(itemDto, user.getId());
         bookingDto.setItemId(item.getId());
-        Booking booking = service.createBooking(bookingDto, anotherUser.getId());
+        BookingDto booking = service.createBooking(bookingDto, anotherUser.getId());
         service.updateBooking(user.getId(), booking.getBookingId(), false);
         assertThatExceptionOfType(MissingException.class)
                 .isThrownBy(() -> service.getOwnersBookings(user.getId() * (-1), "REJECTED"));
@@ -383,7 +383,7 @@ class BookingServiceImplTest {
         itemDto.setIsFree(true);
         ItemDto item = itemService.createItem(itemDto, user.getId());
         bookingDto.setItemId(item.getId());
-        Booking booking = service.createBooking(bookingDto, anotherUser.getId());
+        BookingDto booking = service.createBooking(bookingDto, anotherUser.getId());
         service.updateBooking(user.getId(), booking.getBookingId(), false);
         assertThatExceptionOfType(ValidationException.class)
                 .isThrownBy(() -> service.getOwnersBookings(user.getId(), "DVGSDVFSDVS"));
@@ -400,9 +400,9 @@ class BookingServiceImplTest {
         itemDto.setIsFree(true);
         ItemDto item = itemService.createItem(itemDto, user.getId());
         bookingDto.setItemId(item.getId());
-        Booking booking = service.createBooking(bookingDto, anotherUser.getId());
+        BookingDto booking = service.createBooking(bookingDto, anotherUser.getId());
         service.updateBooking(user.getId(), booking.getBookingId(), false);
-        List<Booking> bookingsForCheck = service.getBookingsPagged(anotherUser.getId(), "REJECTED", "0", "1");
+        List<BookingDto> bookingsForCheck = service.getBookingsPagged(anotherUser.getId(), "REJECTED", 0, 1);
         assertThat(bookingsForCheck.get(0).getBookingId(), notNullValue());
         assertThat(bookingsForCheck.get(0).getUser().getId(), is(anotherUser.getId()));
         assertThat(bookingsForCheck.get(0).getItem().getName(), is(itemDto.getName()));
@@ -420,9 +420,9 @@ class BookingServiceImplTest {
         itemDto.setIsFree(true);
         ItemDto item = itemService.createItem(itemDto, user.getId());
         bookingDto.setItemId(item.getId());
-        Booking booking = service.createBooking(bookingDto, anotherUser.getId());
+        BookingDto booking = service.createBooking(bookingDto, anotherUser.getId());
         service.updateBooking(user.getId(), booking.getBookingId(), false);
-        List<Booking> bookingsForCheck = service.getBookingsPagged(anotherUser.getId(), "REJECTED", "null", "null");
+        List<BookingDto> bookingsForCheck = service.getBookingsPagged(anotherUser.getId(), "REJECTED", 0, 1);
         assertThat(bookingsForCheck.get(0).getBookingId(), notNullValue());
         assertThat(bookingsForCheck.get(0).getUser().getId(), is(anotherUser.getId()));
         assertThat(bookingsForCheck.get(0).getItem().getName(), is(itemDto.getName()));
@@ -440,10 +440,10 @@ class BookingServiceImplTest {
         itemDto.setIsFree(true);
         ItemDto item = itemService.createItem(itemDto, user.getId());
         bookingDto.setItemId(item.getId());
-        Booking booking = service.createBooking(bookingDto, anotherUser.getId());
+        BookingDto booking = service.createBooking(bookingDto, anotherUser.getId());
         service.updateBooking(user.getId(), booking.getBookingId(), false);
         assertThatExceptionOfType(ValidationException.class)
-                .isThrownBy(() -> service.getBookingsPagged(anotherUser.getId(), "REJECTED", "-1", "-1"));
+                .isThrownBy(() -> service.getBookingsPagged(anotherUser.getId(), "REJECTED", -1, -1));
     }
 
     @Test
@@ -457,9 +457,9 @@ class BookingServiceImplTest {
         itemDto.setIsFree(true);
         ItemDto item = itemService.createItem(itemDto, user.getId());
         bookingDto.setItemId(item.getId());
-        Booking booking = service.createBooking(bookingDto, anotherUser.getId());
+        BookingDto booking = service.createBooking(bookingDto, anotherUser.getId());
         service.updateBooking(user.getId(), booking.getBookingId(), false);
-        List<Booking> bookingsForCheck = service.getOwnersBookingsPagged(user.getId(), "REJECTED", "0", "1");
+        List<BookingDto> bookingsForCheck = service.getOwnersBookingsPagged(user.getId(), "REJECTED", 0, 1);
         assertThat(bookingsForCheck.get(0).getBookingId(), notNullValue());
         assertThat(bookingsForCheck.get(0).getUser().getId(), is(anotherUser.getId()));
         assertThat(bookingsForCheck.get(0).getItem().getName(), is(itemDto.getName()));
@@ -477,9 +477,9 @@ class BookingServiceImplTest {
         itemDto.setIsFree(true);
         ItemDto item = itemService.createItem(itemDto, user.getId());
         bookingDto.setItemId(item.getId());
-        Booking booking = service.createBooking(bookingDto, anotherUser.getId());
+        BookingDto booking = service.createBooking(bookingDto, anotherUser.getId());
         service.updateBooking(user.getId(), booking.getBookingId(), false);
-        List<Booking> bookingsForCheck = service.getOwnersBookingsPagged(user.getId(), "REJECTED", "0", "777");
+        List<BookingDto> bookingsForCheck = service.getOwnersBookingsPagged(user.getId(), "REJECTED", 0, 777);
         assertThat(bookingsForCheck.get(0).getBookingId(), notNullValue());
         assertThat(bookingsForCheck.get(0).getUser().getId(), is(anotherUser.getId()));
         assertThat(bookingsForCheck.get(0).getItem().getName(), is(itemDto.getName()));

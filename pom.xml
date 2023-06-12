@@ -116,6 +116,7 @@
                     </excludes>
                 </configuration>
             </plugin>
+
         </plugins>
         <pluginManagement>
             <plugins>

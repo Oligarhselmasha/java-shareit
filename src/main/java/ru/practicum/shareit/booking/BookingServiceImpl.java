@@ -14,6 +14,7 @@ import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -27,7 +28,7 @@ public class BookingServiceImpl implements BookingService {
     private final BookingMapper bookingMapper;
 
     @Override
-    public Booking createBooking(BookingDto bookingDto, Integer userId) {
+    public BookingDto createBooking(BookingDto bookingDto, Integer userId) {
         Booking booking = bookingMapper.toBooking(bookingDto);
         Item bookingsItem = itemRepository.findById(bookingDto.getItemId()).orElseThrow(() ->
                 new MissingException("is not exist"));
@@ -48,12 +49,13 @@ public class BookingServiceImpl implements BookingService {
                 new MissingException("is not exist"));
         booking.setUser(bookingsUser);
         booking.setStatus(BookingStatus.WAITING);
-        return bookingRepository.save(booking);
+        Booking bookingForReceive = bookingRepository.save(booking);
+        return bookingMapper.toBookingDto(bookingForReceive);
     }
 
     @Override
-    public Booking updateBooking(Integer userId, Integer bookingId, Boolean isApproved) {
-        Booking bookingForUpdate = getBooking(bookingId);
+    public BookingDto updateBooking(Integer userId, Integer bookingId, Boolean isApproved) {
+        Booking bookingForUpdate = bookingMapper.toBooking(getBooking(bookingId));
         if (bookingForUpdate.getItem().getUser().getId() != userId) {
             throw new MissingException("thing isn't users thing");
         }
@@ -68,105 +70,111 @@ public class BookingServiceImpl implements BookingService {
             }
             bookingForUpdate.setStatus(BookingStatus.REJECTED);
         }
-        return bookingRepository.save(bookingForUpdate);
+        Booking bookingForReceive = bookingRepository.save(bookingForUpdate);
+        return bookingMapper.toBookingDto(bookingForReceive);
     }
 
     @Override
-    public Booking getBooking(Integer bookingId) {
-        return bookingRepository.findById(bookingId).orElseThrow(() ->
+    public BookingDto getBooking(Integer bookingId) {
+        Booking bookingForReceive = bookingRepository.findById(bookingId).orElseThrow(() ->
                 new MissingException("is not exist"));
+        return bookingMapper.toBookingDto(bookingForReceive);
     }
 
 
     @Override
-    public Booking getBooking(Integer bookingId, Integer userId) {
+    public BookingDto getBooking(Integer bookingId, Integer userId) {
         Booking bookingForReceive = bookingRepository.findById(bookingId).orElseThrow(() -> {
             throw new MissingException("is not exist");
         });
         if (bookingForReceive.getUser().getId() != userId && bookingForReceive.getItem().getUser().getId() != userId) {
             throw new MissingException("thing isn't users thing");
         }
-        return bookingForReceive;
+        return bookingMapper.toBookingDto(bookingForReceive);
     }
 
 
     @Override
-    public List<Booking> getBookings(Integer userId, @NotNull String state) {
+    public List<BookingDto> getBookings(Integer userId, @NotNull String state) {
         userRepository.findById(userId).orElseThrow(() ->
                 new MissingException("is not exist"));
         switch (state) {
             case "ALL":
-                return bookingRepository.findByUser_IdOrderByIdDesc(userId);
+                return convertBookingsList(bookingRepository.findByUser_IdOrderByIdDesc(userId));
             case "CURRENT":
-                return bookingRepository.findByUser_IdAndStartTimeBeforeAndEndTimeAfterOrderByStartTimeDesc(userId,
-                        LocalDateTime.now(), LocalDateTime.now());
+                return convertBookingsList(bookingRepository.findByUser_IdAndStartTimeBeforeAndEndTimeAfterOrderByStartTimeDesc(userId,
+                        LocalDateTime.now(), LocalDateTime.now()));
             case "FUTURE":
-                return bookingRepository.findByUser_IdAndStartTimeAfterOrderByIdDesc(userId, LocalDateTime.now());
+                return convertBookingsList(bookingRepository.findByUser_IdAndStartTimeAfterOrderByIdDesc(userId, LocalDateTime.now()));
             case "PAST":
-                return bookingRepository.findByUser_IdAndEndTimeBeforeOrderByIdDesc(userId, LocalDateTime.now());
+                return convertBookingsList(bookingRepository.findByUser_IdAndEndTimeBeforeOrderByIdDesc(userId, LocalDateTime.now()));
             case "WAITING":
-                return bookingRepository.findByUser_IdAndStatusOrderByIdDesc(userId, BookingStatus.WAITING);
+                return convertBookingsList(bookingRepository.findByUser_IdAndStatusOrderByIdDesc(userId, BookingStatus.WAITING));
             case "REJECTED":
-                return bookingRepository.findByUser_IdAndStatusOrderByIdDesc(userId, BookingStatus.REJECTED);
+                return convertBookingsList(bookingRepository.findByUser_IdAndStatusOrderByIdDesc(userId, BookingStatus.REJECTED));
             default:
                 throw new ValidationException("Unknown state: UNSUPPORTED_STATUS");
         }
     }
 
     @Override
-    public List<Booking> getOwnersBookings(Integer userId, String state) {
+    public List<BookingDto> getOwnersBookings(Integer userId, String state) {
         userRepository.findById(userId).orElseThrow(() -> {
             throw new MissingException("is not exist");
         });
         switch (state) {
             case "ALL":
-                return bookingRepository.findByItem_User_IdOrderByBookingIdDesc(userId);
+                return convertBookingsList(bookingRepository.findByItem_User_IdOrderByBookingIdDesc(userId));
             case "CURRENT":
-                return bookingRepository.findByItem_User_IdAndStartTimeBeforeAndEndTimeAfterOrderByBookingIdDesc(userId,
-                        LocalDateTime.now(), LocalDateTime.now());
+                return convertBookingsList(bookingRepository.findByItem_User_IdAndStartTimeBeforeAndEndTimeAfterOrderByBookingIdDesc(userId,
+                        LocalDateTime.now(), LocalDateTime.now()));
             case "FUTURE":
-                return bookingRepository.findByItem_User_IdAndStartTimeAfterOrderByBookingIdDesc(userId,
-                        LocalDateTime.now());
+                return convertBookingsList(bookingRepository.findByItem_User_IdAndStartTimeAfterOrderByBookingIdDesc(userId,
+                        LocalDateTime.now()));
             case "PAST":
-                return bookingRepository.findByItem_User_IdAndEndTimeBeforeOrderByBookingIdDesc(userId,
-                        LocalDateTime.now());
+                return convertBookingsList(bookingRepository.findByItem_User_IdAndEndTimeBeforeOrderByBookingIdDesc(userId,
+                        LocalDateTime.now()));
             case "WAITING":
-                return bookingRepository.findByItem_User_IdAndStatusOrderByBookingIdDesc(userId, BookingStatus.WAITING);
+                return convertBookingsList(bookingRepository.findByItem_User_IdAndStatusOrderByBookingIdDesc(userId, BookingStatus.WAITING));
             case "REJECTED":
-                return bookingRepository.findByItem_User_IdAndStatusOrderByBookingIdDesc(userId, BookingStatus.REJECTED);
+                return convertBookingsList(bookingRepository.findByItem_User_IdAndStatusOrderByBookingIdDesc(userId, BookingStatus.REJECTED));
             default:
                 throw new ValidationException("Unknown state: UNSUPPORTED_STATUS");
         }
     }
 
     @Override
-    public List<Booking> getBookingsPagged(Integer userId, String state, String from, String size) {
-        List<Booking> bookings = getBookings(userId, state);
+    public List<BookingDto> getBookingsPagged(Integer userId, String state, Integer from, Integer size) {
+        List<BookingDto> bookings = getBookings(userId, state);
         return makePagging(bookings, from, size);
     }
 
     @Override
-    public List<Booking> getOwnersBookingsPagged(Integer userId, String state, String from, String size) {
-        List<Booking> bookings = getOwnersBookings(userId, state);
+    public List<BookingDto> getOwnersBookingsPagged(Integer userId, String state, Integer from, Integer size) {
+        List<BookingDto> bookings = getOwnersBookings(userId, state);
         return makePagging(bookings, from, size);
     }
 
-    private List<Booking> makePagging(List<Booking> bookings, String from, String size) {
-        if (from.equals("null") || size.equals("null")) {
+    private List<BookingDto> makePagging(List<BookingDto> bookings, Integer from, Integer size) {
+        if (from == 0 && size == 1) {
             return bookings;
         }
-        int fromInt = Integer.parseInt(from);
-        int sizeInt = Integer.parseInt(size);
-        if (fromInt < 0 || sizeInt <= 0) {
+        if (from < 0 || size <= 0) {
             throw new ValidationException("wrong parameters");
         }
-        List<Booking> bookingForReceive;
-        if (fromInt + sizeInt >= bookings.size()) {
-            sizeInt = bookings.size();
-            bookingForReceive = bookings.subList(fromInt, sizeInt);
+        List<BookingDto> bookingForReceive;
+        if (from + size >= bookings.size()) {
+            size = bookings.size();
+            bookingForReceive = bookings.subList(from, size);
             return bookingForReceive;
         }
-        bookingForReceive = bookings.subList(fromInt, fromInt + sizeInt);
+        bookingForReceive = bookings.subList(from, from + size);
         return bookingForReceive;
+    }
+
+    private List<BookingDto> convertBookingsList(List<Booking> bookings) {
+        List<BookingDto> bookingDtos = new ArrayList<>();
+        bookings.forEach(b -> bookingDtos.add(bookingMapper.toBookingDto(b)));
+        return bookingDtos;
     }
 }

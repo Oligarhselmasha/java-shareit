@@ -17,35 +17,35 @@ public class BookingController {
     private final BookingService bookingService;
 
     @PostMapping
-    public Booking createBooking(@RequestHeader(USER_HEADER) Integer userId,
+    public BookingDto createBooking(@RequestHeader(USER_HEADER) Integer userId,
                                  @Valid @RequestBody BookingDto bookingDto) {
         return bookingService.createBooking(bookingDto, userId);
     }
 
     @PatchMapping("/{bookingId}")
-    public Booking updateItem(@RequestHeader(USER_HEADER) Integer userId, @PathVariable("bookingId") Integer bookingId,
+    public BookingDto updateItem(@RequestHeader(USER_HEADER) Integer userId, @PathVariable("bookingId") Integer bookingId,
                               @RequestParam() Boolean approved) {
         return bookingService.updateBooking(userId, bookingId, approved);
     }
 
     @GetMapping("/{bookingId}")
-    public Booking getBooking(@RequestHeader(USER_HEADER) Integer userId, @PathVariable("bookingId") Integer bookingId) {
+    public BookingDto getBooking(@RequestHeader(USER_HEADER) Integer userId, @PathVariable("bookingId") Integer bookingId) {
         return bookingService.getBooking(bookingId, userId);
     }
 
     @GetMapping()
-    public List<Booking> getBookings(@RequestHeader(USER_HEADER) Integer userId, @RequestParam(defaultValue = "ALL",
+    public List<BookingDto> getBookings(@RequestHeader(USER_HEADER) Integer userId, @RequestParam(defaultValue = "ALL",
             required = false) String state,
-                                     @RequestParam(defaultValue = "null", required = false) String from,
-                                     @RequestParam(defaultValue = "null", required = false) String size) {
+                                     @RequestParam(defaultValue = "0", required = false) Integer from,
+                                     @RequestParam(defaultValue = "1", required = false) Integer size) {
         return bookingService.getBookingsPagged(userId, state, from, size);
     }
 
     @GetMapping("/owner")
-    public List<Booking> getOwnersBookings(@RequestHeader(USER_HEADER) Integer userId,
+    public List<BookingDto> getOwnersBookings(@RequestHeader(USER_HEADER) Integer userId,
                                            @RequestParam(defaultValue = "ALL", required = false) String state,
-                                           @RequestParam(defaultValue = "null", required = false) String from,
-                                           @RequestParam(defaultValue = "null", required = false) String size) {
+                                           @RequestParam(defaultValue = "0", required = false) Integer from,
+                                           @RequestParam(defaultValue = "1", required = false) Integer size) {
         return bookingService.getOwnersBookingsPagged(userId, state, from, size);
     }
 }

@@ -7,6 +7,9 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.*;
+import ru.practicum.shareit.booking.BookingStatus;
+import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.model.User;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -37,4 +40,13 @@ public class BookingDto {
     private LocalDateTime endTime;
 
     private Integer bookerId;
+
+    private String comment;
+
+    private BookingStatus status;
+
+    @JsonProperty("booker")
+    private User user;
+
+    private Item item;
 }

@@ -67,6 +67,9 @@ class BookingControllerTest {
         bookingDto.setBookingId(1);
         bookingDto.setBookerId(1);
         bookingDto.setItemId(1);
+        bookingDto.setBookingId(1);
+        bookingDto.setUser(user);
+        bookingDto.setItem(item);
         bookingDto.setStartTime(LocalDateTime.now().minusMinutes(1));
         bookingDto.setEndTime(LocalDateTime.now().minusMinutes(2));
     }
@@ -74,7 +77,7 @@ class BookingControllerTest {
     @Test
     void createBooking() throws Exception {
         when(service.createBooking(any(), anyInt()))
-                .thenReturn(booking);
+                .thenReturn(bookingDto);
 
         mvc.perform(post("/bookings")
                         .content(mapper.writeValueAsString(bookingDto))
@@ -89,7 +92,7 @@ class BookingControllerTest {
     @Test
     void updateItem() throws Exception {
         when(service.updateBooking(any(), anyInt(), anyBoolean()))
-                .thenReturn(booking);
+                .thenReturn(bookingDto);
 
         mvc.perform(patch("/bookings/1")
                         .content(mapper.writeValueAsString(bookingDto))
@@ -105,7 +108,7 @@ class BookingControllerTest {
     @Test
     void getBooking() throws Exception {
         when(service.getBooking(anyInt(), anyInt()))
-                .thenReturn(booking);
+                .thenReturn(bookingDto);
 
         mvc.perform(get("/bookings/1")
                         .characterEncoding(StandardCharsets.UTF_8)
@@ -118,9 +121,9 @@ class BookingControllerTest {
 
     @Test
     void getBookings() throws Exception {
-        List<Booking> bookings = new ArrayList<>();
-        bookings.add(booking);
-        when(service.getBookingsPagged(anyInt(), anyString(), anyString(), anyString()))
+        List<BookingDto> bookings = new ArrayList<>();
+        bookings.add(bookingDto);
+        when(service.getBookingsPagged(anyInt(), anyString(), anyInt(), anyInt()))
                 .thenReturn(bookings);
 
         mvc.perform(get("/bookings")
@@ -136,9 +139,9 @@ class BookingControllerTest {
 
     @Test
     void getOwnersBookings() throws Exception {
-        List<Booking> bookings = new ArrayList<>();
-        bookings.add(booking);
-        when(service.getOwnersBookingsPagged(anyInt(), anyString(), anyString(), anyString()))
+        List<BookingDto> bookings = new ArrayList<>();
+        bookings.add(bookingDto);
+        when(service.getOwnersBookingsPagged(anyInt(), anyString(), anyInt(), anyInt()))
                 .thenReturn(bookings);
 
         mvc.perform(get("/bookings/owner")
