@@ -17,7 +17,6 @@ import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
-import ru.practicum.shareit.request.mapper.RequestMapper;
 import ru.practicum.shareit.request.model.Request;
 import ru.practicum.shareit.request.repository.RequestRepository;
 import ru.practicum.shareit.user.model.User;
@@ -39,8 +38,6 @@ public class ItemServiceImpl implements ItemService {
     private final CommentRepository commentRepository;
     private final RequestRepository requestRepository;
 
-    private final RequestMapper requestMapper;
-
     @Override
     public ItemDto createItem(ItemDto itemDto, Integer userId) {
         Item item = itemMapper.toItem(itemDto);
@@ -57,7 +54,7 @@ public class ItemServiceImpl implements ItemService {
             request.setItems(items);
             requestRepository.save(request);
         }
-        return toItemDto(item);
+        return itemMapper.getItemDto(item);
     }
 
     @Override
@@ -82,7 +79,8 @@ public class ItemServiceImpl implements ItemService {
         if (itemRepository.findById(itemId).orElseThrow().getUser().getId() != userId) {
             throw new MissingException("Isn't user's thing");
         }
-        return toItemDto(itemRepository.save(item));
+        Item itemForReceive = itemRepository.save(item);
+        return itemMapper.getItemDto(itemForReceive);
     }
 
     @Override
@@ -112,18 +110,14 @@ public class ItemServiceImpl implements ItemService {
         comments.forEach(comment -> commentDtos.add(commentMapper.toCommentDto(comment)));
         commentDtos.forEach(c -> c.setAuthorName(commentRepository.findById(c.getId()).orElseThrow().getAuthor().getName()));
         item.setComments(commentDtos);
-        return toItemDto(item);
+        return itemMapper.getItemDto(item);
     }
 
     @Override
     public List<ItemDto> getUsersItems(Integer userId) {
         List<Item> items = itemRepository.findByUser_Id(userId);
         List<ItemDto> itemDtos = new ArrayList<>();
-        for (Item item : items) {
-            ItemDto itemDto = toItemDto(item);
-            itemDto = getItem(itemDto.getId(), userId);
-            itemDtos.add(itemDto);
-        }
+        items.forEach(i -> itemDtos.add(getItem(i.getId(), userId)));
         return itemDtos;
     }
 
@@ -134,7 +128,7 @@ public class ItemServiceImpl implements ItemService {
         }
         List<Item> items = itemRepository.findByDescriptionContainsIgnoreCaseAndIsFreeTrue(text);
         List<ItemDto> itemDtos = new ArrayList<>();
-        items.forEach(i -> itemDtos.add(toItemDto(i)));
+        items.forEach(i -> itemDtos.add(itemMapper.getItemDto(i)));
         return itemDtos;
     }
 
@@ -143,23 +137,15 @@ public class ItemServiceImpl implements ItemService {
         if (commentDto.getText().isBlank() || commentDto.getText().isEmpty()) {
             throw new ValidationException("text is empty");
         }
-        List<Booking> bookings =  bookingRepository.findAll();
         if (bookingRepository.existsByItem_IdAndUser_IdAndStatusAndEndTimeBefore(itemId, userId, BookingStatus.APPROVED,
                 LocalDateTime.now())) {
-                Comment comment = new Comment();
-                comment.setItem(itemRepository.findById(itemId).orElseThrow());
-                User author = userRepository.findById(userId).orElseThrow();
-                comment.setAuthor(author);
-                comment.setText(commentDto.getText());
-                comment.setCreated(LocalDateTime.now());
-                commentRepository.save(comment);
-                commentDto = commentMapper.toCommentDto(comment);
-                commentDto.setAuthorName(author.getName());
-            } else {
-                throw new ValidationException("booking ist exist");
-            }
-
-        return commentDto;
+            Comment comment = makeComment(commentDto, userId, itemId);
+            commentDto = commentMapper.toCommentDto(comment);
+            commentDto.setAuthorName(comment.getAuthor().getName());
+            return commentDto;
+        } else {
+            throw new ValidationException("booking ist exist");
+        }
     }
 
     @Override
@@ -171,35 +157,14 @@ public class ItemServiceImpl implements ItemService {
         itemRepository.deleteById(itemId);
     }
 
-    private ItemDto toItemDto(Item item) {
-        ItemDto itemDto = new ItemDto();
-        if (item.getIsFree() != null) {
-            itemDto.setIsFree(item.getIsFree());
-        }
-        if (item.getRequest() != null) {
-            itemDto.setRequestId(item.getRequest().getId());
-        }
-        if (item.getName() != null) {
-            itemDto.setName(item.getName());
-        }
-        if (item.getDescription() != null) {
-            itemDto.setDescription(item.getDescription());
-        }
-        if (item.getUser() != null) {
-            itemDto.setUser(item.getUser());
-        }
-        if (item.getId() != null) {
-            itemDto.setId(item.getId());
-        }
-        if (item.getComments() != null) {
-            itemDto.setComments(item.getComments());
-        }
-        if (item.getLastBooking() != null) {
-            itemDto.setLastBooking(item.getLastBooking());
-        }
-        if (item.getNextBooking() != null) {
-            itemDto.setNextBooking(item.getNextBooking());
-        }
-        return itemDto;
+    private Comment makeComment(CommentDto commentDto, Integer userId, Integer itemId) {
+        Comment comment = new Comment();
+        comment.setItem(itemRepository.findById(itemId).orElseThrow());
+        User author = userRepository.findById(userId).orElseThrow();
+        comment.setAuthor(author);
+        comment.setText(commentDto.getText());
+        comment.setCreated(LocalDateTime.now());
+        commentRepository.save(comment);
+        return comment;
     }
 }
