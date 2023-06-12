@@ -29,6 +29,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.practicum.shareit.constants.Variables.USER_HEADER;
 
 @ExtendWith(MockitoExtension.class)
 class ItemRequestControllerTest {
@@ -94,7 +95,7 @@ class ItemRequestControllerTest {
                         .content(mapper.writeValueAsString(itemRequestDto))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1)
+                        .header(USER_HEADER, 1)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(itemRequestFrontDto.getId()), Integer.class))
@@ -107,7 +108,7 @@ class ItemRequestControllerTest {
                 .thenReturn(itemRequestFrontDtos);
 
         mvc.perform(get("/requests")
-                        .header("X-Sharer-User-Id", 1)
+                        .header(USER_HEADER, 1)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].description", is(itemRequestFrontDtos.get(0).getDescription())))
@@ -120,7 +121,7 @@ class ItemRequestControllerTest {
                 .thenReturn(itemRequestFrontDtos);
 
         mvc.perform(get("/requests/all")
-                        .header("X-Sharer-User-Id", 1)
+                        .header(USER_HEADER, 1)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].description", is(itemRequestFrontDtos.get(0).getDescription())))
@@ -133,7 +134,7 @@ class ItemRequestControllerTest {
                 .thenReturn(itemRequestFrontDto);
 
         mvc.perform(get("/requests/1")
-                        .header("X-Sharer-User-Id", 1)
+                        .header(USER_HEADER, 1)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(itemRequestFrontDto.getId()), Integer.class))

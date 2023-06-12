@@ -1,12 +1,12 @@
 package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingService;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.exceptions.MissingException;
@@ -36,36 +36,33 @@ class ItemServiceImplTest {
     private final UserService userService;
 
     private final BookingService bookingService;
+    private  ItemDto dtoIn;
+    private  User user;
 
 
-    private ItemDto makeItemDto() {
-        ItemDto dto = new ItemDto();
-        dto.setDescription("Описание вещи");
-        dto.setName("Вещь");
-        dto.setIsFree(true);
-        return dto;
+    @BeforeEach
+    private void makeItemDto() {
+        dtoIn = new ItemDto();
+        dtoIn.setDescription("Описание вещи");
+        dtoIn.setName("Вещь");
+        dtoIn.setIsFree(true);
+        user = userService.createUser(new UserDto("Кирилл", "kirill-bulanov@yandex.ru"));
     }
 
     @Test
     void createItem() {
-        ItemDto dtoIn = makeItemDto();
-        User user = userService.createUser(new UserDto("Кирилл", "kirill-bulanov@yandex.ru"));
         ItemDto dtoOut = service.createItem(dtoIn, user.getId());
         assertThat(dtoOut.getId(), notNullValue());
     }
 
     @Test
     void createItemUserIsNotExist() {
-        ItemDto dtoIn = makeItemDto();
-        User user = userService.createUser(new UserDto("Кирилл", "kirill-bulanov@yandex.ru"));
         assertThatExceptionOfType(MissingException.class)
                 .isThrownBy(() -> service.createItem(dtoIn, user.getId() * (-1)));
     }
 
     @Test
     void updateItemIsNotExist() {
-        ItemDto dtoIn = makeItemDto();
-        User user = userService.createUser(new UserDto("Кирилл", "kirill-bulanov@yandex.ru"));
         ItemDto dtoOut = service.createItem(dtoIn, user.getId());
         dtoOut.setDescription("Другая вещь");
         assertThatExceptionOfType(MissingException.class)
@@ -74,8 +71,6 @@ class ItemServiceImplTest {
 
     @Test
     void updateItemUserIsNotExist() {
-        ItemDto dtoIn = makeItemDto();
-        User user = userService.createUser(new UserDto("Кирилл", "kirill-bulanov@yandex.ru"));
         ItemDto dtoOut = service.createItem(dtoIn, user.getId());
         dtoOut.setDescription("Другая вещь");
         assertThatExceptionOfType(MissingException.class)
@@ -84,8 +79,6 @@ class ItemServiceImplTest {
 
     @Test
     void updateItemWrongUser() {
-        ItemDto dtoIn = makeItemDto();
-        User user = userService.createUser(new UserDto("Кирилл", "kirill-bulanov@yandex.ru"));
         User userAnother = userService.createUser(new UserDto("Не Кирилл", "kirill-bulanov@mail.ru"));
         ItemDto dtoOut = service.createItem(dtoIn, userAnother.getId());
         dtoOut.setDescription("Другая вещь");
@@ -95,8 +88,6 @@ class ItemServiceImplTest {
 
     @Test
     void updateItem() {
-        ItemDto dtoIn = makeItemDto();
-        User user = userService.createUser(new UserDto("Кирилл", "kirill-bulanov@yandex.ru"));
         ItemDto dtoOut = service.createItem(dtoIn, user.getId());
         dtoOut.setDescription("Другая вещь");
         ItemDto dtoOutForCheck = service.updateItem(dtoOut, user.getId(), dtoOut.getId());
@@ -105,8 +96,6 @@ class ItemServiceImplTest {
 
     @Test
     void updateItemNullsParameters() {
-        ItemDto dtoIn = makeItemDto();
-        User user = userService.createUser(new UserDto("Кирилл", "kirill-bulanov@yandex.ru"));
         ItemDto dtoOut = service.createItem(dtoIn, user.getId());
         int itemId = dtoOut.getId();
         dtoOut.setDescription(null);
@@ -119,8 +108,6 @@ class ItemServiceImplTest {
 
     @Test
     void getItem() {
-        ItemDto dtoIn = makeItemDto();
-        User user = userService.createUser(new UserDto("Кирилл", "kirill-bulanov@yandex.ru"));
         ItemDto dtoOutCreated = service.createItem(dtoIn, user.getId());
 
         User anotherUser = userService.createUser(new UserDto("Кирилл", "kirill-bulanov@mail.ru"));
@@ -139,8 +126,6 @@ class ItemServiceImplTest {
 
     @Test
     void getItemWithLastBookings() throws InterruptedException {
-        ItemDto dtoIn = makeItemDto();
-        User user = userService.createUser(new UserDto("Кирилл", "kirill-bulanov@yandex.ru"));
         ItemDto dtoOutCreated = service.createItem(dtoIn, user.getId());
 
         User anotherUser = userService.createUser(new UserDto("Кирилл", "kirill-bulanov@mail.ru"));
@@ -160,8 +145,6 @@ class ItemServiceImplTest {
 
     @Test
     void getItemIsNotExist() {
-        ItemDto dtoIn = makeItemDto();
-        User user = userService.createUser(new UserDto("Кирилл", "kirill-bulanov@yandex.ru"));
         ItemDto dtoOutCreated = service.createItem(dtoIn, user.getId());
 
         User anotherUser = userService.createUser(new UserDto("Кирилл", "kirill-bulanov@mail.ru"));
@@ -180,8 +163,6 @@ class ItemServiceImplTest {
 
     @Test
     void getUsersItems() {
-        ItemDto dtoIn = makeItemDto();
-        User user = userService.createUser(new UserDto("Кирилл", "kirill-bulanov@yandex.ru"));
         dtoIn.setUser(user);
         service.createItem(dtoIn, user.getId());
         List<ItemDto> dtoOuts = service.getUsersItems(user.getId());
@@ -190,8 +171,6 @@ class ItemServiceImplTest {
 
     @Test
     void getItemByQuery() {
-        ItemDto dtoIn = makeItemDto();
-        User user = userService.createUser(new UserDto("Кирилл", "kirill-bulanov@yandex.ru"));
         dtoIn.setUser(user);
         service.createItem(dtoIn, user.getId());
         service.getItemByQuery((long) user.getId(), "Описание");
@@ -201,8 +180,6 @@ class ItemServiceImplTest {
 
     @Test
     void getItemByEmptyQuery() {
-        ItemDto dtoIn = makeItemDto();
-        User user = userService.createUser(new UserDto("Кирилл", "kirill-bulanov@yandex.ru"));
         dtoIn.setUser(user);
         service.createItem(dtoIn, user.getId());
         service.getItemByQuery((long) user.getId(), "");
@@ -212,8 +189,6 @@ class ItemServiceImplTest {
 
     @Test
     void createItemsComment() throws InterruptedException {
-        ItemDto dtoIn = makeItemDto();
-        User user = userService.createUser(new UserDto("Кирилл", "kirill-bulanov@yandex.ru"));
         User anotherUser = userService.createUser(new UserDto("Кирилл", "kirill-bulanov@mail.ru"));
         dtoIn.setUser(user);
         ItemDto itemDtoOut = service.createItem(dtoIn, user.getId());
@@ -239,8 +214,6 @@ class ItemServiceImplTest {
 
     @Test
     void createItemsEmptyComment() throws InterruptedException {
-        ItemDto dtoIn = makeItemDto();
-        User user = userService.createUser(new UserDto("Кирилл", "kirill-bulanov@yandex.ru"));
         User anotherUser = userService.createUser(new UserDto("Кирилл", "kirill-bulanov@mail.ru"));
         dtoIn.setUser(user);
         ItemDto itemDtoOut = service.createItem(dtoIn, user.getId());
@@ -266,8 +239,6 @@ class ItemServiceImplTest {
 
     @Test
     void createItemsBookingIsNotExist() throws InterruptedException {
-        ItemDto dtoIn = makeItemDto();
-        User user = userService.createUser(new UserDto("Кирилл", "kirill-bulanov@yandex.ru"));
         User anotherUser = userService.createUser(new UserDto("Кирилл", "kirill-bulanov@mail.ru"));
         dtoIn.setUser(user);
         ItemDto itemDtoOut = service.createItem(dtoIn, user.getId());
@@ -284,8 +255,6 @@ class ItemServiceImplTest {
 
     @Test
     void removeItem() {
-        ItemDto dtoIn = makeItemDto();
-        User user = userService.createUser(new UserDto("Кирилл", "kirill-bulanov@yandex.ru"));
         dtoIn.setUser(user);
         ItemDto itemDtoOut = service.createItem(dtoIn, user.getId());
         service.removeItem(user.getId(), itemDtoOut.getId());
@@ -295,8 +264,6 @@ class ItemServiceImplTest {
 
     @Test
     void removeWrongItem() {
-        ItemDto dtoIn = makeItemDto();
-        User user = userService.createUser(new UserDto("Кирилл", "kirill-bulanov@yandex.ru"));
         dtoIn.setUser(user);
         ItemDto itemDtoOut = service.createItem(dtoIn, user.getId());
         assertThatExceptionOfType(ValidationException.class)

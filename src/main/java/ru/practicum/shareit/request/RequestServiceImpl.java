@@ -92,11 +92,8 @@ public class RequestServiceImpl implements RequestService {
         List<ItemDto> itemDtos = new ArrayList<>();
         List<Item> requestsItems = request.getItems();
         if (requestsItems != null) {
-            for (Item requestsItem : requestsItems) {
-                ItemDto itemDto = itemsMapper.getItemDto(requestsItem);
-                itemDto.setRequestId(requestsItem.getRequest().getId());
-                itemDtos.add(itemDto);
-            }
+            requestsItems.forEach(item -> item.setRequestId(item.getRequest().getId()));
+            requestsItems.forEach(i -> itemDtos.add(itemsMapper.getItemDto(i)));
         }
         itemRequestFrontDto.setDescription(request.getDescription());
         itemRequestFrontDto.setCreated(request.getCreated());

@@ -28,6 +28,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.practicum.shareit.constants.Variables.USER_HEADER;
 
 @ExtendWith(MockitoExtension.class)
 class ItemControllerTest {
@@ -92,7 +93,7 @@ class ItemControllerTest {
                         .content(mapper.writeValueAsString(itemDtoIn))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1)
+                        .header(USER_HEADER, 1)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(itemDtoOut.getId()), Integer.class))
@@ -109,7 +110,7 @@ class ItemControllerTest {
                         .content(mapper.writeValueAsString(itemDtoIn))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1)
+                        .header(USER_HEADER, 1)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is4xxClientError());
     }
@@ -123,7 +124,7 @@ class ItemControllerTest {
                         .content(mapper.writeValueAsString(itemDtoIn))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1)
+                        .header(USER_HEADER, 1)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1), Integer.class))
@@ -140,7 +141,7 @@ class ItemControllerTest {
                         .content(mapper.writeValueAsString(itemDtoIn))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1)
+                        .header(USER_HEADER, 1)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(itemDtoOut.getId()), Integer.class))
@@ -157,7 +158,7 @@ class ItemControllerTest {
                         .content(mapper.writeValueAsString(itemDtoIn))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1)
+                        .header(USER_HEADER, 1)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(itemDtoOut.getId()), Integer.class))
@@ -170,7 +171,7 @@ class ItemControllerTest {
         mvc.perform(delete("/items/1/")
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1)
+                        .header(USER_HEADER, 1)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().is2xxSuccessful());
@@ -194,7 +195,7 @@ class ItemControllerTest {
         mvc.perform(get("/items/")
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1)
+                        .header(USER_HEADER, 1)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].name", is(itemDtos.get(0).getName())))
@@ -212,7 +213,7 @@ class ItemControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("text", "Описание")
-                        .header("X-Sharer-User-Id", 1)
+                        .header(USER_HEADER, 1)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].name", is(itemDtos.get(0).getName())))

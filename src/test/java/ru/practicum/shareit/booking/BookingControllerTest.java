@@ -26,6 +26,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.practicum.shareit.constants.Variables.USER_HEADER;
 
 @ExtendWith(MockitoExtension.class)
 class BookingControllerTest {
@@ -83,7 +84,7 @@ class BookingControllerTest {
                         .content(mapper.writeValueAsString(bookingDto))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1)
+                        .header(USER_HEADER, 1)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(booking.getBookingId())));
@@ -98,7 +99,7 @@ class BookingControllerTest {
                         .content(mapper.writeValueAsString(bookingDto))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1)
+                        .header(USER_HEADER, 1)
                         .param("approved", "true")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -113,7 +114,7 @@ class BookingControllerTest {
         mvc.perform(get("/bookings/1")
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1)
+                        .header(USER_HEADER, 1)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(booking.getBookingId())));
@@ -129,7 +130,7 @@ class BookingControllerTest {
         mvc.perform(get("/bookings")
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1)
+                        .header(USER_HEADER, 1)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id", is(booking.getBookingId())));
@@ -147,7 +148,7 @@ class BookingControllerTest {
         mvc.perform(get("/bookings/owner")
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1)
+                        .header(USER_HEADER, 1)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id", is(booking.getBookingId())));
