@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.model.Item;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -20,8 +19,8 @@ public class ItemController {
     private final ItemService itemService;
 
     @PostMapping
-    public Item createItem(@RequestHeader(USER_HEADER) Integer userId,
-                           @Valid @RequestBody ItemDto itemDto) {
+    public ItemDto createItem(@RequestHeader(USER_HEADER) Integer userId,
+                              @Valid @RequestBody ItemDto itemDto) {
         return itemService.createItem(itemDto, userId);
     }
 
@@ -32,13 +31,13 @@ public class ItemController {
     }
 
     @PatchMapping("/{itemId}")
-    public Item updateItem(@RequestHeader(USER_HEADER) Integer userId,
-                           @RequestBody ItemDto itemDto, @PathVariable("itemId") Integer itemId) {
+    public ItemDto updateItem(@RequestHeader(USER_HEADER) Integer userId,
+                              @RequestBody ItemDto itemDto, @PathVariable("itemId") Integer itemId) {
         return itemService.updateItem(itemDto, userId, itemId);
     }
 
     @GetMapping("/{itemId}")
-    public Item getItem(@RequestHeader(USER_HEADER) Integer userId, @PathVariable("itemId") Integer itemId) {
+    public ItemDto getItem(@RequestHeader(USER_HEADER) Integer userId, @PathVariable("itemId") Integer itemId) {
         return itemService.getItem(itemId, userId);
     }
 
@@ -49,13 +48,13 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<Item> getUsersItems(@RequestHeader(USER_HEADER) Integer userId) {
+    public List<ItemDto> getUsersItems(@RequestHeader(USER_HEADER) Integer userId) {
         return itemService.getUsersItems(userId);
     }
 
     @GetMapping("/search")
-    public List<Item> findItemByQuery(@RequestHeader(USER_HEADER) Long userId,
-                                      @RequestParam String text) {
+    public List<ItemDto> findItemByQuery(@RequestHeader(USER_HEADER) Long userId,
+                                         @RequestParam String text) {
         return itemService.getItemByQuery(userId, text);
     }
 }

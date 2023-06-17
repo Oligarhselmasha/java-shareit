@@ -33,6 +33,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.23.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
             <version>${spring-boot-starter-data-jpa.version}</version>
@@ -110,6 +116,7 @@
                     </excludes>
                 </configuration>
             </plugin>
+
         </plugins>
         <pluginManagement>
             <plugins>

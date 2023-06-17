@@ -2,14 +2,15 @@ package ru.practicum.shareit.booking;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
-
-import ru.practicum.shareit.user.model.User;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Getter
 @Setter
@@ -48,16 +49,4 @@ public class Booking {
 
     @Column
     private String comment;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        return bookingId != null && bookingId.equals(((Booking) o).getBookingId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(bookingId);
-    }
 }
