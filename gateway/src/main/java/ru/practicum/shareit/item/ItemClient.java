@@ -59,6 +59,6 @@ public class ItemClient extends BaseClient {
         Map<String, Object> parameters = Map.of(
                 "text", text
         );
-       return get("/search", userId, parameters);
+       return get("/search?text={text}", userId, parameters);
     }
 }
