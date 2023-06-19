@@ -120,8 +120,9 @@ public class ItemServiceImpl implements ItemService {
         List<Item> items = itemRepository.findByUser_Id(userId);
         List<ItemDto> itemDtos = new ArrayList<>();
         items.forEach(i -> itemDtos.add(getItem(i.getId(), userId)));
-        return itemDtos.stream().sorted(Comparator.comparing(ItemDto::getId)).
-                collect(Collectors.toList());
+        return itemDtos.stream()
+                .sorted(Comparator.comparing(ItemDto::getId))
+                .collect(Collectors.toList());
 //        return itemDtos;
     }
 
