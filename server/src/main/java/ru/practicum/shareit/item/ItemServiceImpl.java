@@ -123,7 +123,6 @@ public class ItemServiceImpl implements ItemService {
         return itemDtos.stream()
                 .sorted(Comparator.comparing(ItemDto::getId))
                 .collect(Collectors.toList());
-//        return itemDtos;
     }
 
     @Override
