@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestFrontDto;
 
-import javax.validation.Valid;
 import java.util.List;
 
 import static ru.practicum.shareit.constants.Variables.USER_HEADER;
@@ -19,7 +18,7 @@ public class ItemRequestController {
 
     @PostMapping()
     public ItemRequestFrontDto createRequest(@RequestHeader(USER_HEADER) Integer userId,
-                                             @Valid @RequestBody ItemRequestDto requestDto) {
+                                             @RequestBody ItemRequestDto requestDto) {
         return requestService.createRequest(requestDto, userId);
     }
 

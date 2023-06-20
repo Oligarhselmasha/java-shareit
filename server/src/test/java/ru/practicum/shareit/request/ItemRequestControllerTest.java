@@ -138,7 +138,6 @@ class ItemRequestControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(itemRequestFrontDto.getId()), Integer.class))
-//                .andExpect(jsonPath("$.created", is(itemRequestFrontDto.getCreated().toString())))
                 .andExpect(jsonPath("$.description", is(itemRequestFrontDto.getDescription())));
     }
 }

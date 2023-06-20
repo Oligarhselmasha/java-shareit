@@ -1,10 +1,10 @@
 package ru.practicum.shareit.request.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
 @Getter
@@ -13,8 +13,6 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class ItemRequestDto {
 
-    @NotBlank
-    @NotNull
     @JsonProperty("description")
     private String description;
 }
