@@ -1,0 +1,7 @@
+# This is a generated file. Not intended for manual editing.
+version: "3.8"
+services:
+  server:
+    command: "docker run --name docker_server -p 8081:8081 -p 9090:9090 docker_server"
+    ports:
+    - "8081:8081"
